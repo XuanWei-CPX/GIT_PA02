@@ -20,6 +20,15 @@ public class Obstacles : MonoBehaviour
         if(transform.position.z <= -8)
         {
             Destroy(gameObject);
+            GameManager.Instance.UpdateScore();
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            Destroy(gameObject);
         }
     }
 }

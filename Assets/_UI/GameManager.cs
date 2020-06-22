@@ -5,6 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+    public static GameManager Instance;
+
     public enum GameState {  GameOver, GameStart, GameIdle};
     public static GameState CurrentState = GameState.GameIdle;
 
@@ -32,5 +34,17 @@ public class GameManager : MonoBehaviour
         {
             SceneManager.LoadScene(0);
         }
+    }
+
+    public void UpdateLives()
+    {
+        Lives -= 1;
+
+        
+    }
+
+    public void UpdateScore()
+    {
+        Score += 1;
     }
 }
