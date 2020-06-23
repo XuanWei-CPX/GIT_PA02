@@ -18,6 +18,9 @@ public class Player : MonoBehaviour
     private float moveSpeed = 0.05f;
     public int health = 3;
 
+    public int score;
+    public Text scoreTxt;
+
     public GameObject explosion;
     public bool onHit = false;
 
@@ -66,6 +69,8 @@ public class Player : MonoBehaviour
         {
             SceneManager.LoadScene("GameOver");
         }
+
+        scoreTxt.text = "Score : " + score;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -76,6 +81,10 @@ public class Player : MonoBehaviour
             health -= 1;
             healthUpdate();
             GameObject explode = Instantiate(explosion, transform.position, Quaternion.identity) as GameObject;
+        }
+        if(other.gameObject.CompareTag("Trigger"))
+        {
+            score += 1;
         }
     }
 
