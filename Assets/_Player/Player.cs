@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
@@ -14,12 +16,19 @@ public class Player : MonoBehaviour
     private Animator thisAnimator = null;
 
     private float moveSpeed = 0.05f;
+    public int health = 3;
+
+    public GameObject explosion;
+    public bool onHit = false;
+
+    public Image Lives;
 
     void Start()
     {
         thisController = GetComponent<CharacterController>();
         thisAnimator = GetComponentInChildren<Animator>();
         playerMesh = transform.GetChild(0);
+        
     }
 
     void Update()
@@ -52,15 +61,26 @@ public class Player : MonoBehaviour
 
         thisController.Move(MoveDirection);
         transform.position = new Vector3(Mathf.Clamp(transform.position.x, -1.5f, 1.5f), transform.position.y, transform.position.z);
-    }
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Obstacle"))
+        if(health <= 0)
         {
-            print("Hit");
-            GameManager.Instance.UpdateLives();
+            SceneManager.LoadScene("GameOver");
         }
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Obstacle"))
+        {
+            print("Hit");
+            health -= 1;
+            healthUpdate();
+            GameObject explode = Instantiate(explosion, transform.position, Quaternion.identity) as GameObject;
+        }
+    }
+
+    private void healthUpdate()
+    {
+        Lives.rectTransform.sizeDelta = new Vector2(health * 50, 30);
+    }
 }
